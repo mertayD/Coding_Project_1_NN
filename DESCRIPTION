@@ -7,3 +7,5 @@ Maintainer: Mertay Dayanc <md2289@nau.edu>
 Description: KNN implementation
 License: GPL-3
 LinkingTo: RcppEigen
+RoxygenNote: 6.1.1
+Suggests: ElemStatLearn
