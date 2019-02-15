@@ -50,7 +50,8 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
   #if fold.vec is null randomly assign folds
   if(is.null(fold.vec))
   {
-    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
+    #Create 10 equally size folds
+    folds <- cut(seq(1,nrow(X.mat)),breaks=n.folds,labels=FALSE)
   }
 
   # make sure that fold.vec is the same size as y.vec
@@ -74,7 +75,14 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
   # then a matrix of loss values then use colMeans() 
   # and store the result in one column of 
   # train.loss.mat/validation.loss.mat.
-  for(fold.i in seq_along(fold.vec)){
+  
+  #Perform 10 fold cross validation
+  for(i in 1:n.folds){
+    #Segement your data by fold using the which() function 
+    testIndexes <- which(folds==i,arr.ind=TRUE)
+    testData <- X[testIndexes, ]
+    trainData <- X[-testIndexes, ]
+    #Use the test and train data partitions however you desire...
     for(prediction.set.name in c("train", "validation")){
       pred.mat <- NN1toKmaxPredict(
         train.features, train.labels,
