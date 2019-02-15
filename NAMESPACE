@@ -1,0 +1,2 @@
+useDynLib(codungProject1)
+exportPattern("^[[:alpha:]]+")
