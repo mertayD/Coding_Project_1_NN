@@ -1,0 +1,2 @@
+NN1toKmaxPredict <- function(X.mat, Y.vec, testX.mat, )
+result.list <- .C("NN1toKmaxPredict_interface", as.double(X), as.double(Y), as.double(testX), as.integer(nrow(testX)), as.integer(nrow(X)), as.integer(ncol(X)), as.integer(max_neighbors), predictions=double(varResult), PACKAGE="codungProject1")

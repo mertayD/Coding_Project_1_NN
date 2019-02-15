@@ -15,7 +15,11 @@ void NN1toKmaxPredict_interface(
   int status = NN1toKmaxPredict(train_inputs_ptr, train_label_ptr, test_input_ptr,
                                 *n_test_observations_ptr,*n_train_observations_ptr,*n_features_ptr,
                                 *max_neighbours_ptr, test_predictions_ptr);
-  if(status != 0)
+  if(status == -1)
+  {
+    error("Check your inout matrice dimension, one of them has to be less than or equal to 0");
+  }
+  else if(status != 0)
   {
     error("non-zero exit status from NN1toKmaxPredict");
   }
