@@ -41,7 +41,7 @@ int NN1toKmaxPredict(
         int neighbors = model_i + 1;
         int row_i = sorted_index_vec(model_i);
         total += train_label_ptr[row_i];
-        test_predictions_mat(j, model_i) = total/neighbors;
+        test_predictions_mat(model_i, j) = neighbors;
       }
     }
     return 0;
