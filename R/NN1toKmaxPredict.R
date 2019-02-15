@@ -23,7 +23,7 @@ NN1toKmaxPredict <- function(X.mat, Y.vec, testX.mat, max_neighbors){
   result.list <- .C("NN1toKmaxPredict_interface", as.double(X.mat), as.double(Y.vec), as.double(testX.mat), 
                     as.integer(nrow(testX.mat)), as.integer(nrow(X.mat)), as.integer(ncol(X.mat)), 
                     as.integer(max_neighbors),
-                    predictions=double(max_neighbors*nrow(testX.mat)), PACKAGE="codungProject1")
+                    predictions=double(max_neighbors * nrow(testX.mat)), PACKAGE="codungProject1")
   result.list$predictions
 }
 

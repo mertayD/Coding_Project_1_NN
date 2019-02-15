@@ -10,7 +10,7 @@ int NN1toKmaxPredict(
     const int max_neighbours,
     double *test_predictions_ptr //n_test_observations, max_neighbors
 ){
-  Eigen::Map <Eigen::MatrixXd > train_inputs_mat((double*)train_inputs_ptr, n_test_observations, n_features);
+  Eigen::Map <Eigen::MatrixXd > train_inputs_mat((double*)train_inputs_ptr, n_train_observations, n_features);
   Eigen::Map< Eigen::MatrixXd > test_input_mat(
       (double*)test_input_ptr, n_test_observations, n_features);
   
