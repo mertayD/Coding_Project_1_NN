@@ -43,11 +43,18 @@
 #'    n.folds <- 7
 #'    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
 #'    
-#'    NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
+#'    result <- NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
 #' 
 NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
                       fold.vec=NULL, n.folds=5) {
 
+  
+  #if fold.vec is null randomly assign folds
+  if(is.null(fold.vec))
+  {
+    fold.vec <- sample(rep(1:n.folds, l=nrow(x)))
+  }
+  
   # make sure that fold.vec is the same size as y.vec
   # which is the same as the number of rows in X.mat
   if(nrow(X.mat) != length(y.vec) &&  
@@ -58,8 +65,8 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
          Program could not complete.")
   }
   
-  validation.loss.mat = matrix(, nrow = n.folds, ncol = max.neighbors)
-  train.loss.mat = matrix(, nrow = n.folds, ncol = max.neighbors)
+  validation.loss.mat <- matrix(, nrow = n.folds, ncol = max.neighbors)
+  train.loss.mat <- matrix(, nrow = n.folds, ncol = max.neighbors)
   
   for(fold.i in 1:n.folds){
     validation_indices <- which(fold.vec %in% c(fold.i))
