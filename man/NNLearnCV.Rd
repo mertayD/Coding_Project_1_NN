@@ -45,14 +45,15 @@ This is a learning algorithm that uses cross-validation
   validation loss
 }
 \examples{
-   NNLearnCV(x, y, max.neighbors, fold.vec, n.folds)
+   library(codungProject1)
    
-   data(spam, package = "ElemStatLearn")
-   x<-spam[1:5, 1]
-   y<-spam[1:5, 1]
-   max.neighbors <- 30
-   fold.vec <- NULL
+   data(zip.train, package = "ElemStatLearn")
+   x<-zip.train[1:50,-1]
+   y<-zip.train[1:50, 1]
+   max.neighbors <- 5
    n.folds <- 5
-
+   fold.vec <- sample(rep(1:n.folds, l=nrow(x)))
+   
+  NNLearnCV(x, y, max.neighbors, fold.vec, n.folds)
 
 }
