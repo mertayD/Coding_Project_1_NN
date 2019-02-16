@@ -31,4 +31,14 @@ Y <- zip.train[train.i, 1]
 testX <- zip.train[test.i, -1]
 max_neighbors <- 3
 NN1toKmaxPredict(X,Y,testX, 3)
+
+data(prostate, package = "ElemStatLearn")
+io1 <- which(zip.train[,1] \%in\% c(0,1))
+train.i <- io1[1:5]
+test.i <- io1[6:10]
+X <- zip.train[train.i, -1]
+Y <- zip.train[train.i, 1]
+testX <- zip.train[test.i, -1]
+max_neighbors <- 3
+NN1toKmaxPredict(X,Y,testX, 3)
 }
