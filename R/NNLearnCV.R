@@ -39,13 +39,13 @@
 #'    data(zip.train, package = "ElemStatLearn")
 #'    X.mat<-zip.train[1:50,-1]
 #'    y.vec<-zip.train[1:50, 1]
-#'    max.neighbors <- 30
-#'    n.folds <- 7
+#'    max.neighbors <- 6
+#'    n.folds <- 5
 #'    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
 #'    
 #'    result <- NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
 #' 
-NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
+NNLearnCV <- function(X.mat, y.vec, max.neighbors,
                       fold.vec=NULL, n.folds=5) {
 
   
