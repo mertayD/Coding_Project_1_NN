@@ -44,16 +44,17 @@
 #' 
 #' 
 NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
-                            fold.vec=NULL, n.folds=5) 
+                      fold.vec=NULL, n.folds=5) 
 {
-
+  # Type Flag
+  FLAG = "binary"
+  
   #if fold.vec is null randomly assign folds
   if(is.null(fold.vec))
   {
-    #Create 10 equally size folds
-    folds <- cut(seq(1,nrow(X.mat)),breaks=n.folds,labels=FALSE)
+    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
   }
-
+  
   # make sure that fold.vec is the same size as y.vec
   # which is the same as the number of rows in X.mat
   if(nrow(X.mat) != length(y.vec) &&  
@@ -76,25 +77,47 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
   # and store the result in one column of 
   # train.loss.mat/validation.loss.mat.
   
-  #Perform 10 fold cross validation
-  for(i in 1:n.folds){
-    #Segement your data by fold using the which() function 
-    testIndexes <- which(folds==i,arr.ind=TRUE)
-    testData <- X[testIndexes, ]
-    trainData <- X[-testIndexes, ]
-    #Use the test and train data partitions however you desire...
-    for(prediction.set.name in c("train", "validation")){
-      pred.mat <- NN1toKmaxPredict(
-        train.features, train.labels,
-        prediction.set.features, max.neighbors)
-      loss.mat <- if(labels.all.01){
-        ifelse(pred.mat>0.5, 1, 0) != y.vec #zero-one loss for binary classification.
-      }else{
-        (pred.mat-y.vec)^2 #square loss for regression.
+  # k predictions list
+  k.predictions <- matrix()
+  
+  # loop through folds
+  for(fold.i in fold.vec)
+  {
+    # get sets for folds
+    train.set <- fold.vec[fold.i]
+    # train.set.label <- n.folds[fold.i]
+    validation.set <- n.folds.remove(fold.i)
+    
+    # loop through validation set
+    for(valid.i in validation.set)
+    {
+      # loop through knn
+      for(kValue.i in max.neighbors)
+      { 
+        if(IDK != 1 || IDK != 0)
+        {
+          FLAG = "reg"
+        }
+        
+        k.predictions[kValue.i] <- NN1toKmaxPredict(train.set, IDK, validation.set, k.predictions)
       }
-      train.or.validation.loss.mat[, fold.i] <- colMeans(loss.mat)
+      
+      # binary or regression
+      if(FLAG == "binary")
+      {
+        loss.mat[valid.i] <- ifelse(k.predictions>0.5, 1, 0) != y.vec #zero-one loss for binary classification.
+      }
+      else
+      {
+        loss.mat[valid.i] <- (k.predictions-y.vec)^2 #square loss for regression.
+      }
+      
+      #train.or.validation.loss.mat[, fold.i] <- colMeans(loss.mat) #???
+      
     }
+    
   }
+  
   
   # return a list with the following named elements:
   # X.mat, y.vec: training data.
@@ -103,9 +126,10 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
   # selected.neighbors (number of neighbors selected by minimizing the mean validation loss).
   # predict(testX.mat), a function that takes a matrix of inputs/features and returns a vector of predictions.
   returnList <- list("X.mat" = X.mat, "y.vec" = y.vec, "train.loss.mat" = train.loss.mat,
-                 "validation.loss.mat" = validation.loss.mat, "train.loss.vec" = train.loss.vec, 
-                 "validation.loss.vec" = validation.loss.vec, "selected.neighbors" = selected.neighbors, 
-                 "predict(testX.mat)" = predict(testX.mat))
+                     "validation.loss.mat" = validation.loss.mat, "train.loss.vec" = train.loss.vec, 
+                     "validation.loss.vec" = validation.loss.vec, "selected.neighbors" = selected.neighbors, 
+                     "predict(testX.mat)" = predict(testX.mat))
   
-}
+  }
+
 
