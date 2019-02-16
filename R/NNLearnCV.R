@@ -43,11 +43,21 @@
 #'    n.folds <- 7
 #'    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
 #'    
-#'   returned <- NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
+#'    NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
 #' 
 NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
                       fold.vec=NULL, n.folds=5) {
 
+  # make sure that fold.vec is the same size as y.vec
+  # which is the same as the number of rows in X.mat
+  if(nrow(X.mat) != length(y.vec) &&  
+     nrow(X.mat) != length(fold.vec) &&
+     length(fold.vec) != length(y.vec))
+  {
+    stop("y.vec, fold.vec, and X.mat columns are not equal.
+         Program could not complete.")
+  }
+  
   validation.loss.mat = matrix(, nrow = n.folds, ncol = max.neighbors)
   train.loss.mat = matrix(, nrow = n.folds, ncol = max.neighbors)
   
@@ -69,7 +79,6 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
     loss <- matrix(value_val ,nrow = n_rows_validation_set ,ncol = max.neighbors)
     
     validation.loss.mat[fold.i,] = colMeans(loss) #square loss for regression.
-    print(validation.loss.mat)
     pred_vec_train <- NN1toKmaxPredict(
       train_set, train_labels,
       train_set, max.neighbors)
@@ -80,7 +89,7 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
     train.loss.mat[fold.i,] = colMeans(loss)
   }
   
-  validation.loss.vec <- colMeans(validation.loss.mat)
+  validation.loss.vec <- colMeans( validation.loss.mat )
   train.loss.vec <- colMeans(train.loss.mat)
   
   # return a list with the following named elements:
@@ -93,8 +102,6 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
   returnList <- list("X.mat" = X.mat, "y.vec" = y.vec, "train.loss.mat" = train.loss.mat,
                      "validation.loss.mat" = validation.loss.mat, "train.loss.vec" = train.loss.vec, 
                      "validation.loss.vec" = validation.loss.vec)
-  result.list$train.loss.vec
-  result.list$validation.loss.vec
-  result.list$validation.loss.mat
+  return(returnList)
 }
 

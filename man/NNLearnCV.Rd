@@ -54,6 +54,6 @@ This is a learning algorithm that uses cross-validation
    n.folds <- 7
    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
    
-  returned <- NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
+   NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
 
 }
