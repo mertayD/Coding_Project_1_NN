@@ -59,10 +59,8 @@ for(data.name in names(data.list))
     pred.vec <- fit$predict(one.data.set$feature.mat[!is.train])
     ## compute test error of pred vec with respect to one data.set$label[!is.train]
     
-    ### MY CODE TO COMPUTE ERROR
-    error = 1/test.fold 
-    
-    resultsList[{paste(data.name, test.fold)}] <- # save your results
+    # LIST OF LISTS
+    resultsList[data.name] <- NNLearnCV(data.name[, -1], data.name[, 1], max.neighbors, fold.vec, n.folds)# save your results
   }
 }
 ```
@@ -71,9 +69,9 @@ for(data.name in names(data.list))
 
 ### Matrix of loss values
 
-```{r}
+```{r, result = "asis"}
 #print out and/or plot the matrix.
-
+pander::pandoc.table(resultsList[1]$train.loss.mat)
 
 ```
 
@@ -93,9 +91,9 @@ What is the optimal number of neighbors?
 
 ### Matrix of loss values
 
-```{r}
+```{r, result = "asis"}
 #print out and/or plot the matrix.
-
+pander::pandoc.table(resultsList[2]$train.loss.mat)
 
 ```
 
@@ -115,9 +113,9 @@ What is the optimal number of neighbors?
 
 ### Matrix of loss values
 
-```{r}
+```{r, result = "asis"}
 #print out and/or plot the matrix.
-
+pander::pandoc.table(resultsList[3]$train.loss.mat)
 
 ```
 
@@ -137,9 +135,9 @@ What is the optimal number of neighbors?
 
 ### Matrix of loss values
 
-```{r}
+```{r, result = "asis"}
 #print out and/or plot the matrix.
-
+pander::pandoc.table(resultsList[4]$train.loss.mat)
 
 ```
 
@@ -155,13 +153,13 @@ comment on difference between NN and baseline.
 
 What is the optimal number of neighbors?
 
-## Data set 4: ozone 
+## Data set 5: ozone 
 
 ### Matrix of loss values
 
-```{r}
+  ```{r, result = "asis"}
 #print out and/or plot the matrix.
-
+pander::pandoc.table(resultsList[5]$train.loss.mat)
 
 ```
 
