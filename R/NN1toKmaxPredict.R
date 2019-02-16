@@ -19,6 +19,17 @@
 #' testX <- zip.train[test.i, -1]
 #' max_neighbors <- 3
 #' NN1toKmaxPredict(X,Y,testX, 3)
+#' 
+#' data(prostate, package = "ElemStatLearn")
+#' io1 <- which(zip.train[,1] %in% c(0,1))
+#' train.i <- io1[1:5]
+#' test.i <- io1[6:10]
+#' X <- zip.train[train.i, -1]
+#' Y <- zip.train[train.i, 1]
+#' testX <- zip.train[test.i, -1]
+#' max_neighbors <- 3
+#' NN1toKmaxPredict(X,Y,testX, 3)
+
 NN1toKmaxPredict <- function(X.mat, Y.vec, testX.mat, max_neighbors){
   result.list <- .C("NN1toKmaxPredict_interface", as.double(X.mat), as.double(Y.vec), as.double(testX.mat), 
                     as.integer(nrow(testX.mat)), as.integer(nrow(X.mat)), as.integer(ncol(X.mat)), 
