@@ -48,12 +48,11 @@ This is a learning algorithm that uses cross-validation
    library(codungProject1)
    
    data(zip.train, package = "ElemStatLearn")
-   x<-zip.train[1:50,-1]
-   y<-zip.train[1:50, 1]
+   X.mat<-zip.train[1:50,-1]
+   y.vec<-zip.train[1:50, 1]
    max.neighbors <- 5
    n.folds <- 5
    fold.vec <- sample(rep(1:n.folds, l=nrow(x)))
-   
-  NNLearnCV(x, y, max.neighbors, fold.vec, n.folds)
+  NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
 
 }
