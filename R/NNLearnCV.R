@@ -39,16 +39,17 @@
 #'    data(zip.train, package = "ElemStatLearn")
 #'    X.mat<-zip.train[1:50,-1]
 #'    y.vec<-zip.train[1:50, 1]
-#'    max.neighbors <- 5
-#'    n.folds <- 5
-#'    fold.vec <- sample(rep(1:n.folds, l=nrow(x)))
+#'    max.neighbors <- 6
+#'    n.folds <- 7
+#'    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
+#'    
 #'   returned <- NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
 #' 
 NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
                       fold.vec=NULL, n.folds=5) {
 
-  validation.loss.mat = matrix(, nrow = n.folds, ncol = max_neighbors)
-  train.loss.mat = matrix(, nrow = n.folds, ncol = max_neighbors)
+  validation.loss.mat = matrix(, nrow = n.folds, ncol = max.neighbors)
+  train.loss.mat = matrix(, nrow = n.folds, ncol = max.neighbors)
   
   for(fold.i in 1:n.folds){
     validation_indices <- which(fold.vec %in% c(fold.i))
@@ -63,19 +64,24 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
         train_set, train_labels,
         validation_set, max.neighbors)
     
-    pred_mat <- matrix(pred_vec_val,nrow = n_rows_validation_set ,ncol = max_neighbors)
-    loss <- matrix((pred.mat - validation_labels)^2,nrow = n_rows_validation_set ,ncol = max_neighbors)
+    pred_mat_val <- matrix(pred_vec_val,nrow = n_rows_validation_set ,ncol = max.neighbors)
+    value_val <- (pred_mat_val - validation_labels)^2
+    loss <- matrix(value_val ,nrow = n_rows_validation_set ,ncol = max.neighbors)
     
-    validation.loss.mat[fold.i ,] <- colMeans(loss) #square loss for regression.
-    
+    validation.loss.mat[fold.i,] = colMeans(loss) #square loss for regression.
+    print(validation.loss.mat)
     pred_vec_train <- NN1toKmaxPredict(
       train_set, train_labels,
       train_set, max.neighbors)
     
-    pred_mat <- matrix(pred_vec_train ,nrow = n_rows_train_set,ncol = max_neighbors)
-    loss <- matrix((pred.mat - train_labels)^2,nrow = n_rows_validation_set ,ncol = max_neighbors)
-    train.loss.mat[fold.i,] < colMeans(loss)
+    pred_mat_train <- matrix(pred_vec_train ,nrow = n_rows_train_set,ncol = max.neighbors)
+    value_train <- (pred_mat_train - train_labels)^2
+    loss <- matrix(value_train ,nrow = n_rows_validation_set ,ncol =max.neighbors)
+    train.loss.mat[fold.i,] = colMeans(loss)
   }
+  
+  validation.loss.vec <- colMeans(validation.loss.mat)
+  train.loss.vec <- colMeans(train.loss.mat)
   
   # return a list with the following named elements:
   # X.mat, y.vec: training data.
@@ -85,7 +91,10 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
   # predict(testX.mat), a function that takes a matrix of inputs/features and returns a vector of predictions.
   
   returnList <- list("X.mat" = X.mat, "y.vec" = y.vec, "train.loss.mat" = train.loss.mat,
-                     "validation.loss.mat" = validation.loss.mat)
- returnList$train.loss.mat
+                     "validation.loss.mat" = validation.loss.mat, "train.loss.vec" = train.loss.vec, 
+                     "validation.loss.vec" = validation.loss.vec)
+  result.list$train.loss.vec
+  result.list$validation.loss.vec
+  result.list$validation.loss.mat
 }
 

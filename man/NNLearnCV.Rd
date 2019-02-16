@@ -50,9 +50,10 @@ This is a learning algorithm that uses cross-validation
    data(zip.train, package = "ElemStatLearn")
    X.mat<-zip.train[1:50,-1]
    y.vec<-zip.train[1:50, 1]
-   max.neighbors <- 5
-   n.folds <- 5
-   fold.vec <- sample(rep(1:n.folds, l=nrow(x)))
-  NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
+   max.neighbors <- 6
+   n.folds <- 7
+   fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
+   
+  returned <- NNLearnCV(X.mat, y.vec, max.neighbors, fold.vec, n.folds)
 
 }
