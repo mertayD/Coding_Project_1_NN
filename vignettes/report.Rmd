@@ -55,12 +55,12 @@ for(data.name in names(data.list))
   for(test.fold in 1:(n.folds))
   {
     is.train <- fold.vec != test.fold
-    fit <- NearestNeighborsCV(one.data.set$feature.mat[is.train],   one.data.set$label.vec[is.train])
+    fit <- NNLearnCV(one.data.set$feature.mat[is.train],   one.data.set$label.vec[is.train])
     pred.vec <- fit$predict(one.data.set$feature.mat[!is.train])
     ## compute test error of pred vec with respect to one data.set$label[!is.train]
     
     # LIST OF LISTS
-    resultsList[data.name] <- NNLearnCV(data.name[, -1], data.name[, 1], max.neighbors, fold.vec, n.folds)# save your results
+    resultsList[data.name] <- NNLearnCV(data.name[ , -1], data.name[ , 1], max.neighbors, fold.vec, n.folds)# save your results
   }
 }
 ```
@@ -81,11 +81,18 @@ comment on difference between NN and baseline.
 
 ```{r}
 #plot the two loss functions.
-
+ggplot(resultsList[1]$train.loss.vec)
+ggplot(resultsList[1]$validation.loss.vec)
 
 ```
 
 What is the optimal number of neighbors?
+
+```{r}
+#plot the two loss functions.
+resultsList[1]$selected.neighbors
+
+```
 
 ## Data set 2: SAheart
 
@@ -103,11 +110,18 @@ comment on difference between NN and baseline.
 
 ```{r}
 #plot the two loss functions.
-
+ggplot(resultsList[2]$train.loss.vec)
+ggplot(resultsList[2]$validation.loss.vec)
 
 ```
 
 What is the optimal number of neighbors?
+
+```{r}
+#plot the two loss functions.
+resultsList[2]$selected.neighbors
+
+```
 
 ## Data set 3: zip.train
 
@@ -125,11 +139,18 @@ comment on difference between NN and baseline.
 
 ```{r}
 #plot the two loss functions.
-
+ggplot(resultsList[3]$train.loss.vec)
+ggplot(resultsList[3]$validation.loss.vec)
 
 ```
 
 What is the optimal number of neighbors?
+
+```{r}
+#plot the two loss functions.
+resultsList[3]$selected.neighbors
+
+```
 
 ## Data set 4: prostate 
 
@@ -147,17 +168,24 @@ comment on difference between NN and baseline.
 
 ```{r}
 #plot the two loss functions.
-
+ggplot(resultsList[4]$train.loss.vec)
+ggplot(resultsList[4]$validation.loss.vec)
 
 ```
 
 What is the optimal number of neighbors?
 
+```{r}
+#plot the two loss functions.
+resultsList[4]$selected.neighbors
+
+```
+
 ## Data set 5: ozone 
 
 ### Matrix of loss values
 
-  ```{r, result = "asis"}
+```{r, result = "asis"}
 #print out and/or plot the matrix.
 pander::pandoc.table(resultsList[5]$train.loss.mat)
 
@@ -169,8 +197,15 @@ comment on difference between NN and baseline.
 
 ```{r}
 #plot the two loss functions.
-
+ggplot(resultsList[5]$train.loss.vec)
+ggplot(resultsList[5]$validation.loss.vec)
 
 ```
 
 What is the optimal number of neighbors?
+
+```{r}
+#plot the two loss functions.
+resultsList[5]$selected.neighbors
+
+```
