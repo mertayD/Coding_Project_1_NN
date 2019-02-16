@@ -32,3 +32,19 @@ test_that("NN1toKmaxPredict computes same answer as R", {
   }
 })
 
+test_that("NN1toKmaxPredict throws correct errors", {
+  data(zip.train, package = "ElemStatLearn")
+  io1 <- which(zip.train[,1] %in% c(0,1))
+  train.i <- io1[1:5]
+  test.i <- io1[6:7]
+  X <- matrix(, nrow = 10, ncol = 0)
+  Y <- zip.train[train.i, 1]
+  testX <- zip.train[test.i, -1]
+  max_neighbors <- 4
+  
+  # pred_vec <- NN1toKmaxPredict(X,Y,testX, max_neighbors)
+  
+  expect_error(NN1toKmaxPredict(X,Y,testX, max_neighbors), "Check your inout matrice dimension, one of them has to be less than or equal to 0")
+  
+})
+
