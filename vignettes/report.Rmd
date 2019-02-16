@@ -1,5 +1,4 @@
----
-title: "Report for Project One: Nearest Neighbors"
+itle: "Report for Project One: Nearest Neighbors"
 author: "Kaitlyn Grubb"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -44,11 +43,136 @@ data.list <- list(
     feature.mat=ElemStatLearn::zip.train[is.binary,-1])
 )
 
+
+n.folds <- 5
+resultsList <- list()
 for(data.name in names(data.list))
 {
   one.data.set <- data.list[[data.name]]
   set.seed(1)
   fold.vec <- sample(rep(1:n.folds, l=nrow(one.data.set$feature.mat)))
-  NearestNeighborsCV(one.data.set$feature.mat, one.data.set$label.vec)
+    #NearestNeighborsCV(one.data.set$feature.mat,   one.data.set$label.vec)
+  for(test.fold in 1:(n.folds))
+  {
+    is.train <- fold.vec != test.fold
+    fit <- NearestNeighborsCV(one.data.set$feature.mat[is.train],   one.data.set$label.vec[is.train])
+    pred.vec <- fit$predict(one.data.set$feature.mat[!is.train])
+    ## compute test error of pred vec with respect to one data.set$label[!is.train]
+    
+    ### MY CODE TO COMPUTE ERROR
+    error = 1/test.fold 
+    
+    resultsList[{paste(data.name, test.fold)}] <- # save your results
+  }
 }
 ```
+
+## Data set 1: spam
+
+### Matrix of loss values
+
+```{r}
+#print out and/or plot the matrix.
+
+
+```
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+```{r}
+#plot the two loss functions.
+
+
+```
+
+What is the optimal number of neighbors?
+
+## Data set 2: SAheart
+
+### Matrix of loss values
+
+```{r}
+#print out and/or plot the matrix.
+
+
+```
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+```{r}
+#plot the two loss functions.
+
+
+```
+
+What is the optimal number of neighbors?
+
+## Data set 3: zip.train
+
+### Matrix of loss values
+
+```{r}
+#print out and/or plot the matrix.
+
+
+```
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+```{r}
+#plot the two loss functions.
+
+
+```
+
+What is the optimal number of neighbors?
+
+## Data set 4: prostate 
+
+### Matrix of loss values
+
+```{r}
+#print out and/or plot the matrix.
+
+
+```
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+```{r}
+#plot the two loss functions.
+
+
+```
+
+What is the optimal number of neighbors?
+
+## Data set 4: ozone 
+
+### Matrix of loss values
+
+```{r}
+#print out and/or plot the matrix.
+
+
+```
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+```{r}
+#plot the two loss functions.
+
+
+```
+
+What is the optimal number of neighbors?
