@@ -39,7 +39,7 @@
 #'    data(zip.train, package = "ElemStatLearn")
 #'    X.mat<-zip.train[1:50,-1]
 #'    y.vec<-zip.train[1:50, 1]
-#'    max.neighbors <- 6
+#'    max.neighbors <- 30
 #'    n.folds <- 7
 #'    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
 #'    
@@ -86,6 +86,8 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
     loss <- matrix(value_val ,nrow = n_rows_validation_set ,ncol = max.neighbors)
     
     validation.loss.mat[fold.i,] = colMeans(loss) #square loss for regression.
+    
+    
     pred_vec_train <- NN1toKmaxPredict(
       train_set, train_labels,
       train_set, max.neighbors)
@@ -95,9 +97,13 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
     loss <- matrix(value_train ,nrow = n_rows_validation_set ,ncol =max.neighbors)
     train.loss.mat[fold.i,] = colMeans(loss)
   }
-  
-  validation.loss.vec <- colMeans( validation.loss.mat )
+
+  validation.loss.vec <- colMeans(validation.loss.mat)
   train.loss.vec <- colMeans(train.loss.mat)
+  
+  selected.neighbors <- which.min(validation.loss.vec)
+  
+  
   
   # return a list with the following named elements:
   # X.mat, y.vec: training data.
@@ -106,9 +112,8 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30,
   # selected.neighbors (number of neighbors selected by minimizing the mean validation loss).
   # predict(testX.mat), a function that takes a matrix of inputs/features and returns a vector of predictions.
   
-  returnList <- list("X.mat" = X.mat, "y.vec" = y.vec, "train.loss.mat" = train.loss.mat,
+  result.list <- list("X.mat" = X.mat, "y.vec" = y.vec, "train.loss.mat" = train.loss.mat,
                      "validation.loss.mat" = validation.loss.mat, "train.loss.vec" = train.loss.vec, 
-                     "validation.loss.vec" = validation.loss.vec)
-  return(returnList)
+                     "validation.loss.vec" = validation.loss.vec, "selected.neighbors" = selected.neighbors)
 }
 
